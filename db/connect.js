@@ -1,10 +1,9 @@
 const mongoose = require("mongoose");
-require("colors");
 
 const connectDB = async (url) => {
 	try {
 		await mongoose.connect(url);
-		console.log("mongoDB connected".blue);
+		console.log("mongoDB connected");
 	} catch (error) {
 		console.log(error);
 	}
