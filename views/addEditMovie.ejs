@@ -1,0 +1,59 @@
+<%- include("partials/head.ejs") %> <%- include("partials/header.ejs") %>
+<form method="POST" action="/movies/<%= movie ? 'update/' + movie._id : 'add' %>">
+	<a href="/movies">
+		<button type="button">go back</button>
+	</a>
+	<h2><%= movie ? 'Edit' : 'Add' %> Movie</h2>
+	<div>
+		<label for="movieName"> Name: </label>
+		<input
+			type="text"
+			name="movieName"
+			value="<%= movie ? movie.movieName : '' %>"
+			placeholder="Movie Name"
+		/>
+	</div>
+	<div>
+		<label for="releaseDate">Release Date:</label>
+		<input
+			type="text"
+			name="releaseDate"
+			value="<%= movie ? movie.releaseDate : '' %>"
+			placeholder="Release Date"
+		/>
+	</div>
+	<div>
+		<label for="primaryImage">Cover:</label>
+		<input
+			type="text"
+			name="primaryImage"
+			value="<%= movie ? movie.primaryImage : '' %>"
+			placeholder="Image URI"
+		/>
+	</div>
+	<div>
+		<label for="status">Status:</label>
+		<select name="status">
+			<option value="planning_to_watch" <%= movie && movie.status === 'planning_to_watch' ? 'selected' : '' %>>Planning to Watch</option>
+			<option value="in_progress" <%= movie && movie.status === 'in_progress' ? 'selected' : '' %>>In Progress</option>
+			<option value="watched" <%= movie && movie.status === 'watched' ? 'selected' : '' %>>Watched</option>
+		</select>
+	</div>
+	<div>
+		<label for="userScore">Score:</label>
+		<select name="userScore">
+			<option value="">--Select Score--</option>
+			<option value="1" <%= movie && movie.userScore === '1' ? 'selected' : '' %>>1</option>
+			<option value="2" <%= movie && movie.userScore === '2' ? 'selected' : '' %>>2</option>
+			<option value="3" <%= movie && movie.userScore === '3' ? 'selected' : '' %>>3</option>
+			<option value="4" <%= movie && movie.userScore === '4' ? 'selected' : '' %>>4</option>
+			<option value="5" <%= movie && movie.userScore === '5' ? 'selected' : '' %>>5</option>
+		</select>
+	</div>
+	<input type="hidden" name="_csrf" value="<%= _csrf %>" />
+	<button><%= movie ? 'edit' : 'add' %></button>
+	<a href="/movies">
+		<button type="button">cancel</button>
+	</a>
+</form>
+<%- include("partials/footer.ejs") %>

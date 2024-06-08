@@ -2,12 +2,6 @@ const { Schema, Types, model } = require("mongoose");
 
 const MovieSchema = new Schema(
 	{
-		id: {
-			type: String,
-			// not used for UI
-			// required: [true, "Please provide movie id"],
-			// unique: true,
-		},
 		movieName: {
 			type: String,
 			required: [true, "Please provide movie name"],
@@ -15,13 +9,18 @@ const MovieSchema = new Schema(
 		},
 		status: {
 			type: String,
+			required: [
+				true,
+				"Please one of planning_to_watch, in_progress, or watched",
+			],
 			enum: ["planning_to_watch", "in_progress", "watched"],
 			default: "planning_to_watch",
 		},
 		userScore: {
 			type: String,
 			enum: [1, 2, 3, 4, 5],
-			default: 1,
+			required: [true, "Please provide a rating"],
+			default: 3,
 		},
 		startYear: {
 			type: String,
@@ -34,6 +33,7 @@ const MovieSchema = new Schema(
 		},
 		primaryImage: {
 			type: String,
+			required: [true, "Please provide a link to movies cover image"],
 		},
 		createdBy: {
 			type: Types.ObjectId,
