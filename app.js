@@ -3,9 +3,13 @@ const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const passport = require("passport");
 const csrf = require("host-csrf");
-const passportInit = require("./passport/passportInit");
+const helmet = require("helmet");
+const xss = require("xss-clean");
+const rateLimiter = require("express-rate-limit");
+
 const MongoDBStore = require("connect-mongodb-session")(session);
-require("express-async-errors");
+
+const passportInit = require("./passport/passportInit");
 require("dotenv").config();
 const port = process.env.PORT || 3000;
 const url = process.env.MONGO_URI;
@@ -71,6 +75,29 @@ const csrf_middleware = csrf(csrf_options);
 /****************** /CSRF ***********************/
 /************************************************/
 
+/************************************************/
+/******************* HELMET *********************/
+app.use(
+	helmet({
+		contentSecurityPolicy: {
+			directives: {
+				...helmet.contentSecurityPolicy.getDefaultDirectives(),
+				// this ensures that images from external resources will be displayed
+				"img-src": ["'self'", "m.media-amazon.com", "img.freepik.com"],
+			},
+		},
+	})
+);
+/****************** /HELMET *********************/
+/************************************************/
+
+app.use(xss());
+
+const limiter = rateLimiter({
+	windowMs: 15 * 60 * 1000,
+	limit: 100,
+});
+app.use(limiter);
 app.use(require("./middleware/storeLocals"));
 app.use("/secretWord", auth, csrf_middleware, secretWordRouter);
 app.use("/movies", auth, csrf_middleware, moviesRouter);
