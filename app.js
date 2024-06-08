@@ -73,7 +73,7 @@ const csrf_middleware = csrf(csrf_options);
 
 app.use(require("./middleware/storeLocals"));
 app.use("/secretWord", auth, csrf_middleware, secretWordRouter);
-app.use("/jobs", auth, csrf_middleware, moviesRouter);
+app.use("/movies", auth, csrf_middleware, moviesRouter);
 
 app.get("/", csrf_middleware, (req, res) => {
 	res.render("index");
@@ -94,7 +94,9 @@ const start = async () => {
 	try {
 		await require("./db/connect")(process.env.MONGO_URI);
 		app.listen(port, () =>
-			console.log(`Server is listening on port ${port}...`)
+			console.log(
+				`Server is listening on port ${port}... http://localhost:${port}`
+			)
 		);
 	} catch (error) {
 		console.log(error);

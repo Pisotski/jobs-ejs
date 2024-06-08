@@ -1,0 +1,41 @@
+<%- include("partials/head.ejs") %> <%- include("partials/header.ejs") %>
+<h2>Movie List</h2>
+<a href="/movies/add">
+  <button type="button">add Movies</button>
+</a>
+<table id="movies-table">
+  <tr id="movies-table-header">
+    <th>Movie</th>
+    <th>Status</th>
+    <th>My Score</th>
+    <th>Release Date</th>
+    <th colspan="2"></th>
+  </tr>
+  <% if (movies && movies.length) { %>
+    <% movies.forEach((movie) => { 
+        if(typeof movie.primaryImage === "undefined") movie.primaryImage = 'https://img.freepik.com/free-photo/smiley-woman-talking-phone-medium-shot_23-2149476757.jpg?t=st=1714679039~exp=1714682639~hmac=869fb679c055796233b422c340f2c81ec02294159266b1616070683fd4aba5b8&w=1800'
+        %>
+      <tr>
+        <td><%= movie.movieName %>
+            <img src="<%= movie.primaryImage %>" width="50px" height="50px" alt="Movie Pic"/></td>
+        <td><%= movie.status %></td>
+        <td><%= movie.userScore %></td>
+        <td><%= movie.releaseDate %></td>
+        <td><form method="POST" action="/movies/edit/<%= movie._id %>" style="display: inline">
+            <button>edit</button>
+            <input type="hidden" name="movieName" value="<%= movie.movieName %>" />
+            <input type="hidden" name="primaryImage" value="<%= movie.primaryImage %>" />
+            <input type="hidden" name="status" value="<%= movie.status  %>" />
+            <input type="hidden" name="userScore" value="<%= movie.userScore %>" />
+            <input type="hidden" name="releaseDate" value="<%= movie.releaseDate %>" />
+            <input type="hidden" name="_csrf" value="<%= _csrf %>" />
+          </form></td>
+        <td><form method="POST" action="/movies/delete/<%= movie._id %>" style="display: inline">
+            <button>delete</button>
+            <input type="hidden" name="_csrf" value="<%= _csrf %>" />
+          </form></td>
+      </tr>
+    <% }) %>
+  <% } %>
+</table>
+<%- include("partials/footer.ejs") %>
